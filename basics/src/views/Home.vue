@@ -1,16 +1,17 @@
 <template>
   <div class="container">
-    <h1>Hello {{ student }}</h1>
-    <button v-on:click="changeStudent">Change Student</button>
-    <h3>{{ animal }}</h3>
-    <button @click="changeAnimal">Change Animal</button>
-    <ul>
-      <li v-for="animal in animals" :key="animal">{{ animal }}</li>
-    </ul>
-    <h2 v-if="isLoggedIn">Welcome</h2>
-    <h2 v-else>Please Login</h2>
-    <button v-if="isLoggedIn" @click="logout">Logout</button>
-    <button v-else @click="login">Login</button>
+    <h1>Welcome to this Quiz Game!</h1>
+    <h1 v-if="started"> {{ Question[QuestionN] }}</h1>
+    <button v-if="started === true && clickable === true" v-on:click="checkAnswer"> {{ Choice1[QuestionN] }} </button>
+    <button v-else-if="started === true"> {{ Choice1[QuestionN] }} </button>
+    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ Choice2[QuestionN] }} </button>
+    <button v-else-if="started === true"> {{ Choice2[QuestionN] }} </button>
+    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ Choice3[QuestionN] }} </button>
+    <button v-else-if="started === true"> {{ Choice3[QuestionN] }} </button>
+    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ Choice4[QuestionN] }} </button>
+    <button v-else-if="started === true"> {{ Choice4[QuestionN] }} </button>
+    <button v-on:click="startedQuiz" v-else>Begin</button>
+    <button v-on:click="nextQuestion" v-if="submit">Submit</button>
   </div>
 </template>
 
@@ -21,31 +22,36 @@ export default {
   components: {},
   data() {
     return {
-      student: "Harry",
-      animals: ["horse", "savva", "pig", "Zebra", "lion"],
-      animal: "",
-      isLoggedIn: false,
+      Question: ["Who is the first president of the United States?", "How many years old is Melvin Aziz?"],
+      Choice1: ["Thomas Jefferson", "10"],
+      Choice2: ["James Madison", "13"],
+      Choice3: ["George Washington", "14"],
+      Choice4: ["Abraham Lincoln", "16"],
+      correctAnswer: [1,3,0,2,0,2,3,1,2,0],
+      QuestionN: 0,
+      started: false,
+      submit: false,
+      clickable: false,
     };
   },
   methods: {
-    changeStudent: function() {
-      this.student = "Charlene";
+    startedQuiz: function() {
+      this.started = true;
+      this.clickable = true;
     },
-    changeAnimal: function() {
-      let number = Math.floor(Math.random() * 5);
-      this.animal = this.animals[number];
+    checkAnswer: function() {
+      this.submit = true;
+      this.clickable = false;
     },
-    login: function() {
-      this.isLoggedIn = true;
-    },
-    logout: function() {
-      this.isLoggedIn = false;
-    },
+    nextQuestion: function () {
+      this.submit = false;
+      this.clickable = true;
+      this.QuestionN ++;
+    }
+
   },
   created() {},
-  mounted() {
-    this.changeAnimal();
-  },
+  mounted() {  },
   beforeCreate() {},
 };
 </script>
