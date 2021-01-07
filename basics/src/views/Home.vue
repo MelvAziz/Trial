@@ -1,15 +1,15 @@
 <template>
   <div class="container">
     <h1>Welcome to this Quiz Game!</h1>
-    <h1 v-if="started"> {{ Question[QuestionN] }}</h1>
-    <button v-if="started === true && clickable === true" v-on:click="checkAnswer"> {{ Choice1[QuestionN] }} </button>
-    <button v-else-if="started === true"> {{ Choice1[QuestionN] }} </button>
-    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ Choice2[QuestionN] }} </button>
-    <button v-else-if="started === true"> {{ Choice2[QuestionN] }} </button>
-    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ Choice3[QuestionN] }} </button>
-    <button v-else-if="started === true"> {{ Choice3[QuestionN] }} </button>
-    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ Choice4[QuestionN] }} </button>
-    <button v-else-if="started === true"> {{ Choice4[QuestionN] }} </button>
+    <h1 v-if="started"> {{ quiz[QuestionN].question }}</h1>
+    <button v-if="started === true && clickable === true" v-on:click="checkAnswer"> {{ quiz[QuestionN].correct_answer }} </button>
+    <button v-else-if="started === true"> {{ quiz[QuestionN].correct_answer }} </button>
+    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ quiz[QuestionN].incorrect_answers[0] }} </button>
+    <button v-else-if="started === true"> {{ quiz[QuestionN].incorrect_answers[0] }} </button>
+    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ quiz[QuestionN].incorrect_answers[1] }} </button>
+    <button v-else-if="started === true"> {{ quiz[QuestionN].incorrect_answers[1] }} </button>
+    <button v-if="started && clickable === true" v-on:click="checkAnswer"> {{ quiz[QuestionN].incorrect_answers[2] }} </button>
+    <button v-else-if="started === true"> {{ quiz[QuestionN].incorrect_answers[2] }} </button>
     <button v-on:click="startedQuiz" v-else>Begin</button>
     <button v-on:click="nextQuestion" v-if="submit">Submit</button>
   </div>
@@ -22,12 +22,7 @@ export default {
   components: {},
   data() {
     return {
-      Question: ["Who is the first president of the United States?", "How many years old is Melvin Aziz?"],
-      Choice1: ["Thomas Jefferson", "10"],
-      Choice2: ["James Madison", "13"],
-      Choice3: ["George Washington", "14"],
-      Choice4: ["Abraham Lincoln", "16"],
-      correctAnswer: [1,3,0,2,0,2,3,1,2,0],
+      quiz: [],
       QuestionN: 0,
       started: false,
       submit: false,
@@ -47,11 +42,26 @@ export default {
       this.submit = false;
       this.clickable = true;
       this.QuestionN ++;
-    }
-
+    },
+    fetchData: async function() {
+      try {
+        const result = await fetch (`https://opentdb.com/api.php?amount=10&category=23&difficulty=medium&type=multiple`);
+        const data = await result.json();
+        console.log(data);
+        this.quiz = data.results;
+      }
+      catch(error) {
+        alert(error);
+      }
+    },
+    
   },
-  created() {},
-  mounted() {  },
+  created() {
+    
+  },
+  mounted() {  
+        this.fetchData();
+  },
   beforeCreate() {},
 };
 </script>
