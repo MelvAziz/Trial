@@ -22,9 +22,6 @@ export default {
     return {
       quiz: [],
       choices: [],
-      correct: {},
-      correct_answer: {},
-      last_correct_choice: {},
       QuestionN: 0,
       started: false,
       submit: false,
@@ -35,12 +32,9 @@ export default {
     startedQuiz: function() {
       this.started = true;
       this.clickable = true;
-      this.correct_answer = 0;
-      this.correct = this.quiz[this.QuestionN].correct_answer;
       this.choices = [this.correct, this.quiz[this.QuestionN].incorrect_answers[0], this.quiz[this.QuestionN].incorrect_answers[1], this.quiz[this.QuestionN].incorrect_answers[2]];
     },
     checkAnswer: function() {
-      this.last_correct_choice = this.correct_answer;
       this.submit = true;
       this.clickable = false;
     },
@@ -56,10 +50,8 @@ export default {
       this.submit = false;
       this.clickable = true;
       this.QuestionN ++;
-      this.correct = this.quiz[this.QuestionN].correct_answer;
       this.choices = [this.correct, this.quiz[this.QuestionN].incorrect_answers[0], this.quiz[this.QuestionN].incorrect_answers[1], this.quiz[this.QuestionN].incorrect_answers[2]];
       this.shuffle(this.choices);
-      console.log(this.quiz[this.QuestionN].correct_answer); 
     },
     fetchData: async function() {
       try {
